@@ -1,0 +1,74 @@
+<div class="container-shop">
+  <header>
+    <h1>D'Eudy SuperMarket's</h1>
+  </header>
+
+  <main>
+    <section class="content-purchasing_system">
+      <section class="content-purchasing">
+        <section class="purchasing-1">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" />
+          </div>
+
+          <div class="form-group">
+            <label for="precio">Precio:</label>
+            <input type="text" id="precio" name="precio" />
+          </div>
+        </section>
+
+        <section class="purchasing-1">
+          <div class="form-group">
+            <label for="codigo">Codigo:</label>
+            <input type="text" id="codigo" name="codigo" />
+          </div>
+
+          <div class="form-group">
+            <label for="unidades">Unidades:</label>
+            <input type="number" id="unidades" name="unidades" />
+          </div>
+        </section>
+      </section>
+
+      <section class="content-purchasing">
+        <div class="">
+          <button id="decrease" class="btn btn-decrease"> - </button>
+          <button id="increase" class="btn btn-increase"> + </button>
+        </div>
+        
+        <div class="form-group ">
+          <label for="total">Total:</label>
+          <input type="number" id="total" name="total" class="total-value-products" />
+        </div>
+      </section>
+
+      <section class="">
+        <div class="select-payment">
+          {{! <p>Total: <span id="total"></span></p> }}
+          <button id="total_productos" class="btn btn-agregar">Agregar</button>
+
+          <div class="dropdown">
+            <select>
+              <option value="" disabled selected>Metodo de pago</option>
+              <option value="option1">
+                Paypal
+              </option>
+            </select>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section id="productos" class="products-section">
+      <div class="total-section">
+        <label for="totalApagar">Total a pagar: </label>
+        <input type="number" id="totalApagar" readonly />
+      </div>
+      <div>
+        <button id="agregar" class="btn btn-tertiary">Pagar</button>
+      </div>
+    </section>
+    <div id="viewport" class="product-list"></div>
+  </main>
+</div>

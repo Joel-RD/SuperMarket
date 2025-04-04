@@ -1,0 +1,42 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignIn&SignUp</title>
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+  </head>
+
+  <body>
+{{#if user}}
+  <section class="summary">
+    <section class="summary-user">
+      <div class="img_container">
+        <div class="overlay-img">
+          <a href=""><img src="../img/config.png" alt=""></a>
+        </div>
+        <img
+          src="../img/user.png"
+          alt="user-images"
+        />
+        <p>@{{user.userName}}</p>
+      </div>
+      <section class="config-buttons">
+        <form action="/user/logout" method="post">
+          <button class="btn solid btn-logout" type="submit">Logout</button>
+        </form>
+        <button class="btn solid btn-config"><a href="/user/config">Config</a></button>
+      </section>
+    </section>
+  </section>
+{{/if}}
+
+
+    {{{body}}}
+    
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
+    <script src="../app.js"></script>
+    <script src="../quagga.js"></script>
+  </body>
+  </script>
+</html>
