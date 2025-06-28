@@ -1,135 +1,44 @@
-
-<style>
-    .container_ventas {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  padding: 1.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.detalles_ventas {
-  height: 400px;
-  border: 1px solid rgb(49, 24, 187);
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.head_venta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 0.75rem;
-}
-
-.head_venta h4 {
-  color: #1f2937;
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-}
-
-.head_venta p {
-  color: #6b7280;
-  font-size: 0.875rem;
-  margin: 0;
-}
-{{!-- 
-.body_ventas {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #e5e7eb;
-} --}}
-
-.container-body_ventas {
-  overflow-x: hidden;
-  height: 100vh;
-}
-
-.body_ventas {
-  border-radius: 10px;
-  padding: 5px;
-  border: 1px solid #202020;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.body_ventas p {
-  color: #4b5563;
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-.detalles_ventas span {
-  font-weight: 600;
-  color: #1f2937;
-  font-size: 1rem;
-  text-align: right;
-  padding-top: 0.75rem;
-}
-
-/* Estilos para precios */
-.body_ventas div:last-child p {
-  color: #059669;
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .container_ventas {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-  }
-  
-  .body_ventas > div {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-}
-</style>
-<section class="container_ventas"></section>
-
+    <section id="container_ventas"></section>
+<section id="not_sales" style="display: block;">
+    <div class="not_sales-content">
+        <h2>No existen ventas registradas</h2>
+        <p>Por favor, realiza una venta para visualizarla aquí.</p>
+    </div>
+</section>
 <script>
-  const sales = {{{ventas}}}; 
-  
-  const allsales = document.querySelector(".container_ventas");
-
-  Object.values(sales).forEach(sale => {
-    const createHtml = `
-        <section class="detalles_ventas">
-            <div class="head_venta">
-                <h4>ID Venta | ${sale.ventas_id} </h4>
-                <p>Sucursal | ${sale.id_sucursal} </p>
+    const sales = {{{ventas}}}
+  if (Object.keys(sales).length > 0) {
+    {{!-- document.getElementById('container_ventas').style.display = "block"; --}}
+    document.getElementById('not_sales').style.display = "none";
+    const allsales = document.getElementById("container_ventas");
+    Object.values(sales).forEach(sale => {
+      const createHtml = `
+          <section class="detalles_ventas">
+            <div>
+                <div class="head_venta">
+                    <h4>ID Venta | ${sale.ventas_id} </h4>
+                    <p>Sucursal | ${sale.id_sucursal} </p>
+                </div>
+                <h4>Productos</h4>
+                <section class="container-body_ventas">
+                    ${sale.productos.map(producto => `
+                        <div class="body_ventas">
+                            <div>
+                                <p>${producto.producto}</p>
+                                <p>${producto.cantidad}</p>
+                            </div> 
+                            <div>
+                            <p>Precio unitario: ${producto.precio_unitario}</p>
+                            <p>Subtotal: ${producto.subtotal}</p>
+                            </div> 
+                        </div>
+                    `).join('')}
+                </section>
+                <span>Total: ${sale.total}</span>
             </div>
-
-            <h4>Productos</h4>
-            <section class="container-body_ventas">
-              ${sale.productos.map(producto => `
-                  <div class="body_ventas">
-                      <div>
-                          <p>${producto.producto}</p>
-                          <p>${producto.cantidad}</p>
-                      </div> 
-
-                      <div>
-                          <p>Precio unitario: ${producto.precio_unitario}</p>
-                          <p>Subtotal: ${producto.subtotal}</p>
-                      </div> 
-                  </div>
-              `).join('')}
-            </section>
-          <span>Total: ${sale.total}</span>
-        </section>
-    `;
-
-    allsales.insertAdjacentHTML("beforeend", createHtml);
- });
+          </section>
+      `;
+      allsales.insertAdjacentHTML("beforeend", createHtml);
+    });
+  }
 </script>

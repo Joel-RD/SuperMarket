@@ -140,45 +140,23 @@ formSignIn.addEventListener("submit", (e) => {
     .catch((error) => console.error(error));
 });
 
-// formConfigAccount.addEventListener("submit", (e) => {
-//   e.preventDefault();
+function toggleMenu() {
+  const userMenu = document.getElementById("userMenu");
+  userMenu.classList.toggle("active");
+}
 
-//   const newNameUser = document.getElementById("userName-config").value;
-//   const newBranch = document.getElementById("branch-store-config").value;
-//   const LastPassword = document.getElementById("password_config").value;
-//   const newPassword1 = document.getElementById("password_config-1").value;
-//   const newPassword2 = document.getElementById("password_config-2").value;
-//   const updateMessage = document.getElementById("message-config").value;
+document.addEventListener("click", function (event) {
+  const userMenu = document.getElementById("userMenu");
+  if (!userMenu.contains(event.target)) {
+    userMenu.classList.remove("active");
+  }
+});
 
-//   if (newPassword1 !== newPassword2) {
-//     updateMessage.innerText = "New password match";
-//     setTimeout(() => {
-//       updateMessage.innerText = "";
-//     }, 2000);
-//   }
-
-//   fetch("/config", {
-//     method: "post",
-//     headers: {
-//       "Content-Type": "aplication/json",
-//     },
-//     body: JSON.stringify(newNameUser, newBranch, newPassword1),
-//   })
-//     .then(async (res) => {
-//       if (!res.ok) {
-//         updateMessage.innerText = await res.text();
-//         setTimeout(() => {
-//           updateMessage.innerText = "";
-//         }, 2000);
-//       } else {
-//         updateMessage.innerHTML = await res.text();
-//         setTimeout(() => {
-//           updateMessage.innerHTML = "";
-//         });
-//       }
-//     })
-//     .catch((error) => console.log(error));
-// });
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    document.getElementById("userMenu").classList.remove("active");
+  }
+});
 
 function mostrarAnimacionPagoExitoso() {
   const animationElement = document.getElementById("payment-animation");

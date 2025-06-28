@@ -7,7 +7,33 @@
   </div>
 
   <script>
-    setInterval(function(){ window.close(); }, 3000);
+  window.addEventListener('DOMContentLoaded', async function() {
+    const params = new URLSearchParams(location.search);
+    const orderID = params.get("token");
+    const productos = JSON.parse(localStorage.getItem("productosCompra", ));
+    const total = JSON.stringify(localStorage.getItem("totalCompra"))
+    try {
+      if (orderID && productos) {
+        const response = await fetch("/user/shop/confirm-payment", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productos, orderID, total
+          })
+        });
+        const data = await response.json();
+        console.log(data);
+        localStorage.removeItem("productosCompra");
+        localStorage.removeItem("totalCompra");
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    } finally {
+      setTimeout(function(){ window.close(); }, 3000);
+    }
+  });
   </script>
   
   <h4>¡Gracias por tu compra!</h2>

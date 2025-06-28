@@ -1,3 +1,10 @@
+
+
+{{#if isAdmin}}
+    <div id="block-banner" style="display: block;">
+      <div class=".banner-content"></div>
+    </div>
+{{/if}}
 <form id="formConfigAccount" action="" class="formConfigAccount">
         <h2 class="title">Sign Up</h2>
         <div class="input-field">
@@ -38,10 +45,17 @@
         <p id="message-config"></p>
 </form>
 <script>
-  
-  window.onload = function() {
-  alert("Al cambiar la configuracion de su cuenta se cerrara session en la misma.");
-};
+  const isAdminValid = {{{isAdmin}}}
+  if (isAdminValid) {
+    window.onload = function() {
+       alert("Esto es una cuenta por defecto, su configuración no puede ser cambiada");
+    };
+  } else {
+window.onload = function() {
+    alert("Al cambiar la configuracion de su cuenta se cerrara session en la misma.");
+  };
+
+  }
 
   const formConfigAccount = document.getElementById("formConfigAccount");
     formConfigAccount.addEventListener("submit", async (e) => {
@@ -74,7 +88,7 @@
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({username, password}),
+  body: JSON.stringify({username, password, isAdminValid }),
   })
     .then(async (res) => {
       if (!res.ok) {

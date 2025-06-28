@@ -17,7 +17,9 @@
 >
 > **controller/:** Controladores.
 >
-> **index.js:** Configuración y arranque del servidor.
+> **index.js:** Configuración del servidor.
+>
+> **server.js** Arranque del servidor
 >
 > **models/:** Modelos y scripts SQL.
 >

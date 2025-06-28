@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
+import { globalEnvConfig } from "../config.js"
 
-const { SECRET_PASSWORD_EMAIL, SECRET_EMAIL } = process.env;
+const { SECRET_PASSWORD_EMAIL, SECRET_EMAIL } = globalEnvConfig;
 
 export const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",

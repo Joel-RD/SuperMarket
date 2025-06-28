@@ -3,8 +3,9 @@
     <div class="signin-signup">
       <form id="formSignIn" action="" class="sign-in-form">
         <h2 class="title">Sign In</h2>
+        
         <div class="input-field">
-          <img src="./img/userLoging.png"></img>
+          <img src="./img/userLoging.png" alt="User Icon" />
           <input
             id="login-email"
             type="email"
@@ -14,8 +15,9 @@
             required
           />
         </div>
+        
         <div class="input-field">
-          <img src="./img/password.png" alt="">
+          <img src="./img/password.png" alt="Password Icon" />
           <input
             id="login-password"
             type="password"
@@ -25,8 +27,9 @@
             required
           />
         </div>
+        
         <div class="input-field">
-          <img src="./img/password.png" alt="">
+          <img src="./img/password.png" alt="Password Icon" />
           <input
             id="login-password-2"
             type="password"
@@ -36,6 +39,7 @@
             required
           />
         </div>
+        
         <input type="submit" value="Login" class="btn-register solid" />
         <br />
         <p id="message-signIn"></p>
@@ -43,37 +47,40 @@
 
       <form id="formSignUp" action="" class="sign-up-form">
         <h2 class="title">Sign Up</h2>
+        
         <div class="input-field">
-          <img src="./img/userLoging.png" alt="">
+          <img src="./img/userLoging.png" alt="User Icon" />
           <input id="userName" type="text" placeholder="Username" required />
         </div>
+        
         <div class="input-field">
-          <img src="./img/email.png" alt="">
+          <img src="./img/email.png" alt="Email Icon" />
           <input
             id="email"
             type="email"
             placeholder="Email"
             pattern="^[a-zA-Z0-9._%+-]+@(gmail|hotmail|outlook)\.com$"
-            title="Email inválido: Debe ser Gmail, Hotmail o Outlook (ejemplo@gmail.com, ejemplo@hotmail.com, ejemplo@outlook.com"
+            title="Email inválido: Debe ser Gmail, Hotmail o Outlook (ejemplo@gmail.com, ejemplo@hotmail.com, ejemplo@outlook.com)"
             required
           />
         </div>
-
+        
+        <!-- Sucursal a la que perteneces-->
         <div class="input-field">
-          <img src="./img/bransh.png" alt="">
-          <select name="branch-store" id="branch-store" >
-                <option value="">Sucursal</option>
-                <option value="s1">Sucursal #1</option>
-                <option value="s2">Sucursal #2</option>
-                <option value="s3">Sucursal #3</option>
-                <option value="s4">Sucursal #4</option>
-                <option value="s5">Sucursal #5</option>
-                <option value="s6">Sucursal #6</option>
-            </select>
-          {{!-- <input id="branch-store" type="text" placeholder="Branch" required /> --}}
+          <img src="./img/bransh.png" alt="Branch Icon" />
+          <select name="branch-store" id="branch-store">
+            <option value="">Sucursal</option>
+            <option value="s1">Sucursal #1</option>
+            <option value="s2">Sucursal #2</option>
+            <option value="s3">Sucursal #3</option>
+            <option value="s4">Sucursal #4</option>
+            <option value="s5">Sucursal #5</option>
+            <option value="s6">Sucursal #6</option>
+          </select>
         </div>
+        
         <div class="input-field">
-          <img src="./img/password.png" alt="">
+          <img src="./img/password.png" alt="Password Icon" />
           <input
             id="password_signup"
             type="password"
@@ -83,8 +90,10 @@
             required
           />
         </div>
+        
+        <!-- Confirmar contraseña -->
         <div class="input-field">
-          <img src="./img/password.png" alt="">
+          <img src="./img/password.png" alt="Password Icon" />
           <input
             id="password_signup-2"
             type="password"
@@ -94,6 +103,7 @@
             required
           />
         </div>
+        
         <input
           id="sign-up"
           type="submit"
@@ -101,31 +111,26 @@
           class="btn-register solid"
           required
         />
-
         <p id="message-signUp"></p>
       </form>
     </div>
   </div>
-  <div class="panels-container">
 
+  <div class="panels-container">
     <div class="panel left-panel">
       <div class="content">
         <h3>New here?</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio minus
-          natus est.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio minus natus est.</p>
         <button class="btn-register transparent" id="sign-up-btn">Sign Up</button>
       </div>
-      <img src="./img/log.svg" class="image" alt="" />
+      <img src="./img/log.svg" class="image" alt="Log Illustration" />
     </div>
-
+    
     <div class="panel right-panel">
       <div class="content">
         <h3>One of us?</h3>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio minus
-          natus est.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio minus natus est.</p>
         <button class="btn transparent" id="sign-in-btn">Sign In</button>
       </div>
-      <img src="./img/register.svg" class="image" alt="" />
+      <img src="./img/register.svg" class="image" alt="Register Illustration" />
     </div>
-  </div>
-</div>

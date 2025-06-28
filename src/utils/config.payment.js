@@ -1,27 +1,20 @@
-//payment (paypal) config
-import fecth from "node-fetch";
+import fetch from "node-fetch";
+import { globalEnvConfig } from "../config.js";
 
-let {
-  SANDBOX_PAYPAL_LINK,
-  LIVE_PAYPAL_LINK,
+const {
+  LINK_PAYPAL_PAYMENT,
   CLIENT_ID_PAYPAL,
-  CLIENT_SECRET_KEY_PAYPAL,
-  CLIENT_ID_PAYPAL_LIVE,
-  CLIENT_SECRET_KEY_PAYPAL_LIVE,
-  NODE_ENV,
-} = process.env;
-
-if (NODE_ENV === "production") {
-  SANDBOX_PAYPAL_LINK = LIVE_PAYPAL_LINK;
-  CLIENT_ID_PAYPAL = CLIENT_ID_PAYPAL_LIVE;
-  CLIENT_SECRET_KEY_PAYPAL = CLIENT_SECRET_KEY_PAYPAL_LIVE;
-}
+  CLIENT_SECRET_PAYPAL,
+  DEPLOY_URL,
+} = globalEnvConfig;
 
 export const createOrder = async (price) => {
   try {
+    if (!price) throw Error("Price is not valid")
+    if (typeof price !== "number") throw Error("the type value is not valid")
     const accesToken = await generateAccessToken();
-    const url = `${SANDBOX_PAYPAL_LINK}/v2/checkout/orders`;
-    const response = await fecth(url, {
+    const url = `${LINK_PAYPAL_PAYMENT}/v2/checkout/orders`;
+    const response = await fetch(url, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -33,13 +26,13 @@ export const createOrder = async (price) => {
           {
             amount: {
               currency_code: "USD",
-              value: 0.01,
+              value: price,
             },
           },
         ],
         application_context: {
-          return_url: `http://localhost:4650/user/shop/success-payment`,
-          cancel_url: `http://localhost:4650/user/shop/cancel-payment`,
+          return_url: `${DEPLOY_URL}/user/shop/success-payment`,
+          cancel_url: `${DEPLOY_URL}/user/shop/cancel-payment`,
         },
       }),
     });
@@ -47,15 +40,17 @@ export const createOrder = async (price) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error_createOrder", error.message);
+    throw (error);
   }
 };
 
 export const capturePayment = async (orderID) => {
   try {
+    if (!orderID) throw Error("OrderID does not exist")
+    if (typeof orderID !== "string") throw Error("the type orderID is not valid")
     const accesToken = await generateAccessToken();
-    const url = `${SANDBOX_PAYPAL_LINK}/v2/checkout/orders/${orderID}/capture`;
-    const response = await fecth(url, {
+    const url = `${LINK_PAYPAL_PAYMENT}/v2/checkout/orders/${orderID}/capture`;
+    const response = await fetch(url, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -66,27 +61,27 @@ export const capturePayment = async (orderID) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error_capturePayment", error.message);
+    throw (error);
   }
 };
 
 const generateAccessToken = async () => {
   try {
-    const response = await fetch(SANDBOX_PAYPAL_LINK + "/v1/oauth2/token", {
+    const response = await fetch(LINK_PAYPAL_PAYMENT + "/v1/oauth2/token", {
       method: "post",
       body: "grant_type=client_credentials",
       headers: {
         Authorization:
           "Basic " +
-          Buffer.from(
-            CLIENT_ID_PAYPAL + ":" + CLIENT_SECRET_KEY_PAYPAL
-          ).toString("base64"),
+          Buffer.from(CLIENT_ID_PAYPAL + ":" + CLIENT_SECRET_PAYPAL).toString(
+            "base64"
+          ),
       },
     });
 
     const data = await response.json();
     return data.access_token;
   } catch (error) {
-    console.error("Error_generateAccessToken", error.message);
+    throw (error);
   }
 };

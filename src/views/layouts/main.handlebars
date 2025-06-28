@@ -8,35 +8,80 @@
   </head>
 
   <body>
-{{#if user}}
-  <section class="summary">
-    <section class="summary-user">
-      <div class="img_container">
-        <div class="overlay-img">
-          <a href=""><img src="../img/config.png" alt=""></a>
+    {{#if user}}
+<nav class="navbar">
+      <div class="logo">Eudy-Market</div>
+
+      <div class="user-menu" id="userMenu">
+        <button class="user-button" onclick="toggleMenu()">
+          <div class="user-avatar">JD</div>
+          <span>{{user.userName}}</span>
+          <span class="dropdown-arrow">▼</span>
+        </button>
+
+        <div class="dropdown-menu">
+          <div class="dropdown-header">
+            <div class="user-name">{{user.userName}}</div>
+            <div class="user-email">{{user.userEmail}}</div>
+          </div>
+
+          <div class="dropdown-section">
+            <div class="section-title">Módulos</div>
+
+            <a href="/user/shop" class="dropdown-item">
+              <div class="item-icon">💰</div>
+              <span class="item-text">Caja</span>
+            </a>
+
+            <a href="/user/sales" class="dropdown-item">
+              <div class="item-icon">👩‍💻</div>
+              <span class="item-text">Ventas</span>
+            </a>
+
+            <a href="#" class="dropdown-item">
+              <div class="item-icon">📦</div>
+              <span class="item-text">Inventario</span>
+            </a>
+
+            <a href="/user/config" class="dropdown-item">
+              <div class="item-icon">⚙️</div>
+              <span class="item-text">Configuración</span>
+            </a>
+          </div>
+
+          <a href="#" class="dropdown-item logout" id="logout-link">
+            <div class="item-icon">🚪</div>
+            <span class="item-text">Cerrar Sesión</span>
+          </a>
         </div>
-        <img
-          src="../img/user.png"
-          alt="user-images"
-        />
-        <p>@{{user.userName}}</p>
       </div>
-      <section class="config-buttons">
-        <form action="/user/logout" method="post">
-          <button class="btn solid btn-logout" type="submit">Logout</button>
-        </form>
-        <button class="btn solid btn-config"><a href="/user/config">Config</a></button>
-      </section>
-    </section>
-  </section>
-{{/if}}
-
-
+    </nav>
+    {{/if}}
     {{{body}}}
     
     <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.js"></script>
     <script src="../app.js"></script>
     <script src="../quagga.js"></script>
+
+    <script>
+      document.getElementById("logout-link").addEventListener("click", function (e) {
+  e.preventDefault();
+  fetch("/user/logout", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => {
+    if (res.redirected) {
+      window.location.href = res.url;
+    } else {
+      window.location.reload();
+    }
+  });
+});
+
+    </script>
   </body>
   </script>
 </html>

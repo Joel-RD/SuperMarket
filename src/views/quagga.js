@@ -143,6 +143,8 @@ document.getElementById("agregar").addEventListener("click", async () => {
   const precioTotal = document.getElementById("totalApagar");
   precioTotal.value = " ";
 
+  localStorage.setItem("productosCompra", JSON.stringify(productoEscaneado))
+  localStorage.setItem("totalCompra", JSON.stringify(totalPrecio))
   try {
     const request = await fetch(`/user/shop/purchasing`, {
       method: "post",
@@ -150,7 +152,6 @@ document.getElementById("agregar").addEventListener("click", async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        productos: productoEscaneado,
         total: totalPrecio,
       }),
     });

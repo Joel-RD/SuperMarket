@@ -9,18 +9,20 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import { isAuthenticated } from "./utils/isAutentication.js";
 import cors from "cors";
+import { globalEnvConfig } from "./config.js";
 
 const app = express();
 
-const { PORT_SERVER} = process.env;
+const { PORT_SERVER, DEPLOY_URL } = globalEnvConfig;
 
 //middlewares
 app.use(
   cors({
-    origin: "https://api-m.sandbox.paypal.com",
+    origin: DEPLOY_URL,
     credentials: true,
   })
 );
+app.set('trust proxy', true)
 app.use(cookieParser());
 app.use(logger("dev"));
 app.use(express.json());
@@ -43,6 +45,4 @@ app.all("*", (req, res) => {
   res.status(404).render("err.handlebars");
 });
 
-app.listen(PORT_SERVER, () =>
-  console.log(`Server running on port http://localhost:${PORT_SERVER}/register`)
-);
+export default app;

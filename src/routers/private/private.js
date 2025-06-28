@@ -10,8 +10,7 @@ const router = Router();
 
 router.get("/adminpanel", (req, res) => {
   const user = req.session;
-
-  res.render("panel.handlebars", { user });
+  res.render("panel.handlebars");
 });
 
 router.get("/shop", (req, res) => {
@@ -19,7 +18,9 @@ router.get("/shop", (req, res) => {
 });
 
 router.get("/config", (req, res) => {
-  res.render("config.handlebars");
+  const user = req.session;
+  const isAdmin = user.userEmail === "user_admin@gmail.com"
+  res.render("config.handlebars", {isAdmin});
 });
 
 router.post("/user/config/update", rate_Limit, updateConfig);

@@ -1,19 +1,38 @@
+import { globalEnvConfig } from "../config.js";
 import { executeQuery } from "../models/DB.js";
 import * as paypal from "../utils/config.payment.js";
 
-let {NODE_ENV} = process.env; 
+const { NODE_ENV } = globalEnvConfig;
 
-export const paymentPaypal = async (req, res) => {
+export const createPaypalOrder = async (req, res) => {
   try {
-    let { productos, total } = req.body;
-
+    let { total } = req.body;
     if (NODE_ENV === "production") {
       total = 0.01;
     }
+    const order = await paypal.createOrder(total.toFixed(2));    
+   res.status(200).json({message: order.links[1].href});
+  } catch (error) {
+    res.status(500).json({ message: "Error creando la orden de PayPal" });
+  }
+};
 
-    const order = await paypal.createOrder(total.toFixed(2));
-    await paypal.capturePayment(order.id);
+export const confirmPaypalPayment = async (req, res) => {
+  try {
+    let { productos, orderID, total} = req.body;
+    const newTotal = total;
 
+    const paymentResult = await paypal.capturePayment(orderID);
+    if (paymentResult.status !== "COMPLETED") {
+      return res.status(400).json({ message: "Pago no completado" });
+    }    
+
+    if (typeof newTotal !== 'number') {
+      total = Number(newTotal);
+    }
+
+    console.log(req.body, total);
+    
     //usuario logueado
     const user = req.session.userEmail;
     const queryUser = `SELECT * FROM usersauth WHERE email = $1`;
@@ -26,6 +45,9 @@ export const paymentPaypal = async (req, res) => {
       const query = `SELECT id, stock FROM productos WHERE codigo_barras = $1`;
       const params = [barCode];
       const stockResult = await executeQuery(query, params);
+      if (!stockResult.rows[0]) {
+        throw new Error(`Producto con código de barras ${barCode} no encontrado.`);
+      }
       if (stockResult.rows[0].stock < productos[barCode].cantidad) {
         throw new Error(
           `Stock insuficiente para el producto con código ${barCode}.`
@@ -35,7 +57,7 @@ export const paymentPaypal = async (req, res) => {
 
     // Insertar venta
     const ventaQuery = `INSERT INTO ventas (ventas_id, id_sucursal, total) VALUES ($1, $2, $3) RETURNING *`;
-    const ventaParams = [order.id, userIdSucursal, total];
+    const ventaParams = [orderID, userIdSucursal, total];
     const ventaResult = await executeQuery(ventaQuery, ventaParams);
     const ventaId = ventaResult.rows[0].id;
 
@@ -68,10 +90,10 @@ export const paymentPaypal = async (req, res) => {
       await executeQuery(updateStockQuery, updateStockParams);
     }
 
-    res.status(200).json(order.links[1].href);
+    res.status(200).json({ message: "Compra registrada correctamente" });
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ message: "Ah ocurrido u error al procesar la compra, Intentelo nuevamente." });
+    res.status(500).json({ message: "Error al registrar la compra" });
   }
 };
 

@@ -10,7 +10,7 @@ router.get("/emailverify", async (req, res) => {
 
 router.post("/emailverify", verifyEmail);
 
-router.post("/singin", userLogin);
+router.post("singin/", userLogin);
 
 router.post("/user/logout", (req, res) => {
   res.clearCookie("access_token_login");

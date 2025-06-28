@@ -3,8 +3,14 @@ import { creteProducts } from "../utils/generateFakeData.js";
 import { comparePassword, hashgenerator } from "../utils/passwordEncrypt.js";
 
 export const updateConfig = async (req, res) => {
-  let { username, password } = req.body;
-  const { userEmail } = req.session;  
+  let { username, password, isAdminValid } = req.body;
+  const { userEmail } = req.session;
+
+  if (isAdminValid || userEmail === "user_admin@gmail.com") {
+    return res
+      .status(403)
+      .send("No se puede modificar la cuenta de administrador.");
+  }
 
   const existUserQuery = "select * from usersauth where email = $1;";
   const existUserParams = [userEmail];
@@ -83,7 +89,7 @@ export const scandProduct = async (req, res) => {
     //Limpiar todas las ventas y sus detalles cada 2 horas
     const interval = 2 * 60 * 60 * 1000;
     setInterval(async () => {
-      const autoDeleteQuery =  `truncate ventas , detall_ventas;`;
+      const autoDeleteQuery = `truncate ventas , detall_ventas;`;
       await executeQuery(autoDeleteQuery); //Borrar todas las ventas y sus detalles
     }, interval);
 
@@ -98,8 +104,13 @@ export const scandProduct = async (req, res) => {
   }
 };
 
-export const salesPanel = async (req, res) => {
-  const { userIdSucursal } = req.session;
+export const sales_Panel = async (req, res) => {
+  let { userIdSucursal } = req.session;
+
+  userIdSucursal = Number(userIdSucursal);
+  if (isNaN(userIdSucursal)) {
+    return res.status(400).send("El id de sucursal no es válido.");
+  }
 
   const query = `
     SELECT 
@@ -123,9 +134,6 @@ ORDER BY
   const params = [userIdSucursal];
 
   const result = await executeQuery(query, params);
-  if (result.rowCount === 0) {
-    res.send("Upps , aun no ah visto ninguna compra");
-  }
 
   const agrupar = result.rows.reduce((acumulado, actual) => {
     if (!acumulado[actual.ventas_id]) {
@@ -144,8 +152,9 @@ ORDER BY
       subtotal: actual.subtotal,
     });
     return acumulado;
-  }, {}); 
-
-  // console.log(agrupados[Object.keys(agrupados)[0]]);
-  res.render("sales.handlebars", {ventas: JSON.stringify(agrupar)});
+  }, {});
+  res.render("sales.handlebars", { ventas: JSON.stringify(agrupar) });
 };
+
+export const salesPanel =  sales_Panel;
+setInterval(() =>  salesPanel, 43200000);
